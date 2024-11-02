@@ -6,7 +6,7 @@ class StudentItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       child: Container(
         height: 107,
         clipBehavior: Clip.hardEdge,

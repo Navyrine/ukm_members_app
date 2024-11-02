@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:ukm_members_app/models/student.dart';
+import 'package:http/http.dart' as http;
 
 class AddStudentScreen extends StatefulWidget {
   const AddStudentScreen({super.key});
@@ -13,16 +17,63 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredNim = "";
   var _enteredName = "";
-  var _enteredBirth = "";
+  DateTime? _selectedBirth;
+  final _birthController = TextEditingController();
   var _enteredAddress = "";
+  var _isSending = false;
 
-  void _saveForm() {
+  void _datePicker() async {
+    final now = DateTime.now();
+    final firstDate = DateTime(now.year - 100, now.month, now.day);
+    final lastDate = DateTime(now.year, now.month, now.day);
+    final pickedDate = await showDatePicker(
+      context: context,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+
+    setState(() {
+      _selectedBirth = pickedDate;
+      _birthController.text = formatter.format(pickedDate!);
+    });
+  }
+
+  void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      print(_enteredNim);
-      print(_enteredName);
-      print(_enteredBirth);
-      print(_enteredAddress);
+      setState(() {
+        _isSending = true;
+      });
+
+      final url = Uri.parse(
+          "https://ukm-members-default-rtdb.firebaseio.com/students.json");
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(
+          {
+            "nim": _enteredNim,
+            "name": _enteredName,
+            "birth": _selectedBirth!.toIso8601String(),
+            "address": _enteredAddress
+          },
+        ),
+      );
+
+      final Map<String, dynamic> resData = json.decode(response.body);
+
+      if (!context.mounted) {
+        return;
+      }
+      Navigator.of(context).pop<Student>(
+        Student(
+          id: resData["name"],
+          nim: _enteredNim,
+          name: _enteredName,
+          brith: _selectedBirth!,
+          adress: _enteredAddress,
+        ),
+      );
     }
   }
 
@@ -78,18 +129,21 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _birthController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Birth"),
                 ),
+                readOnly: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return "Birth must be filled";
                   }
                   return null;
                 },
+                onTap: _datePicker,
                 onSaved: (value) {
-                  _enteredBirth = value!;
+                  _birthController.text = value!;
                 },
               ),
               const SizedBox(height: 20),
@@ -110,9 +164,14 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
               ),
               const SizedBox(height: 15),
               ElevatedButton(
-                onPressed: _saveForm,
-                child: const Text("Save"),
-              )
+                  onPressed: _isSending ? null : _saveForm,
+                  child: _isSending
+                      ? const SizedBox(
+                          height: 16,
+                          width: 16,
+                          child: CircularProgressIndicator(),
+                        )
+                      : const Text("Save"))
             ],
           ),
         ),

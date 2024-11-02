@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:ukm_members_app/models/student.dart';
 
 class StudentItem extends StatelessWidget {
-  const StudentItem({super.key});
+  const StudentItem({
+    super.key,
+    required this.studentData,
+  });
+
+  final Student studentData;
 
   @override
   Widget build(BuildContext context) {
@@ -55,34 +61,38 @@ class StudentItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      "Nim",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.white
-                      ),
+                      studentData.nim,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge!
+                          .copyWith(color: Colors.white),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "Nama",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.white
-                      ),
+                      studentData.name,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.white),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "Tanggal Lahir",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.white
-                      ),
+                      studentData.formattedDate,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.white),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "Alamat",
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: Colors.white
-                      ),
+                      studentData.adress,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.white),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

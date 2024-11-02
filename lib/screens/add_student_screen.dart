@@ -65,7 +65,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
       if (!context.mounted) {
         return;
       }
-      Navigator.of(context).pop<Student>(
+      Navigator.of(context).pop(
         Student(
           id: resData["name"],
           nim: _enteredNim,

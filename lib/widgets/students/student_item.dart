@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ukm_members_app/models/student.dart';
+import 'package:ukm_members_app/screens/update_student_screen.dart';
 
 class StudentItem extends StatelessWidget {
   const StudentItem({
@@ -13,94 +14,101 @@ class StudentItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: Container(
-        height: 107,
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 73, 94, 202),
-            borderRadius: BorderRadius.circular(18)),
-        child: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              bottom: 0,
-              child: ClipPath(
-                clipper: ClipHalfOvalLeftSide(),
-                child: Container(
-                  height: 200,
-                  width: 280,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 47, 104, 215),
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => UpdateStudentScreen(studentUpdate: studentData))
+          );
+        },
+        child: Container(
+          height: 107,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 73, 94, 202),
+              borderRadius: BorderRadius.circular(18)),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                bottom: 0,
+                child: ClipPath(
+                  clipper: ClipHalfOvalLeftSide(),
+                  child: Container(
+                    height: 200,
+                    width: 280,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 47, 104, 215),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 0,
-              right: 0,
-              bottom: 0,
-              child: ClipPath(
-                clipper: ClipOvalRightSide(),
-                child: Container(
-                  width: 235,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 47, 104, 215),
+              Positioned(
+                top: 0,
+                right: 0,
+                bottom: 0,
+                child: ClipPath(
+                  clipper: ClipOvalRightSide(),
+                  child: Container(
+                    width: 235,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 47, 104, 215),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Positioned(
-              top: 0,
-              bottom: 0,
-              left: 0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text(
-                      studentData.nim,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(color: Colors.white),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      studentData.name,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.white),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      studentData.formattedDate,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.white),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      studentData.adress,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.white),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+              Positioned(
+                top: 0,
+                bottom: 0,
+                left: 0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        studentData.nim,
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleLarge!
+                            .copyWith(color: Colors.white),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        studentData.name,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.white),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        studentData.formattedDate,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.white),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Text(
+                        studentData.adress,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.white),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

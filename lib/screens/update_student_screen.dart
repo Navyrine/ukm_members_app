@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukm_members_app/models/student.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukm_members_app/provider/students_provider.dart';
 
-class AddStudentScreen extends ConsumerStatefulWidget {
-  const AddStudentScreen({super.key});
+class UpdateStudentScreen extends ConsumerStatefulWidget {
+  const UpdateStudentScreen({
+    super.key,
+    required this.studentUpdate,
+  });
+
+  final Student studentUpdate;
 
   @override
-  ConsumerState<AddStudentScreen> createState() {
-    return _AddStudentScreenState();
-  }
+  ConsumerState<UpdateStudentScreen> createState() =>
+      _UpdateStudentScreenState();
 }
 
-class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
+class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredNim = "";
   var _enteredName = "";
   DateTime? _selectedBirth;
   final _birthController = TextEditingController();
   var _enteredAddress = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _birthController.text = widget.studentUpdate.formattedDate;
+  }
 
   void _datePicker() async {
     final now = DateTime.now();
@@ -36,12 +46,12 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
     });
   }
 
-  void _saveForm() async {
+  void _updateDataForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      final newStudent = Student(
-        id: "",
+      final updateStudent = Student(
+        id: widget.studentUpdate.id,
         nim: _enteredNim,
         name: _enteredName,
         brith: _selectedBirth!,
@@ -49,26 +59,26 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
       );
 
       try {
-      await ref.read(studentProvider.notifier).addStudent(newStudent);
-          Navigator.of(context).pop(newStudent);
+      await ref.read(studentProvider.notifier).updateData(updateStudent);
+      Navigator.of(context).pop(updateStudent);
       } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Failed to save data: $e"),
             ),
           );
-        
       }
+      
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final isSending = ref.watch(studentProvider).isLoading;
+    final isUpdate = ref.watch(studentProvider).isLoading;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add Student"),
+        title: const Text("Update Student"),
         titleSpacing: -1,
       ),
       body: Padding(
@@ -79,6 +89,7 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
+                initialValue: widget.studentUpdate.nim,
                 maxLength: 10,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
@@ -100,6 +111,7 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
               ),
               const SizedBox(height: 17),
               TextFormField(
+                initialValue: widget.studentUpdate.name,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Name"),
@@ -135,6 +147,7 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                initialValue: widget.studentUpdate.adress,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Address"),
@@ -151,14 +164,15 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
               ),
               const SizedBox(height: 15),
               ElevatedButton(
-                  onPressed: isSending ? null : _saveForm,
-                  child: isSending
-                      ? const SizedBox(
-                          height: 16,
-                          width: 16,
-                          child: CircularProgressIndicator(),
-                        )
-                      : const Text("Save"))
+                onPressed: isUpdate ? null : _updateDataForm,
+                child: isUpdate
+                    ? const SizedBox(
+                        height: 16,
+                        width: 16,
+                        child: CircularProgressIndicator(),
+                      )
+                    : const Text("Update"),
+              )
             ],
           ),
         ),

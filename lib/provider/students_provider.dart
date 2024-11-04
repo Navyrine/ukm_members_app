@@ -49,7 +49,7 @@ class StudentsNotifier extends StateNotifier<AsyncValue<List<Student>>> {
 
     try {
       state = const AsyncValue.loading();
-      
+
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
@@ -78,6 +78,36 @@ class StudentsNotifier extends StateNotifier<AsyncValue<List<Student>>> {
       );
 
       state = AsyncValue.data([...state.value ?? [], student]);
+      await loadStudents();
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
+
+  Future<void> updateData(Student student) async {
+    final url = Uri.parse(
+        "https://ukm-members-default-rtdb.firebaseio.com/students/${student.id}.json");
+
+    try {
+      state = const AsyncValue.loading();
+
+      final response = await http.patch(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(
+          {
+            "nim": student.nim,
+            "name": student.name,
+            "birth": student.brith.toIso8601String(),
+            "address": student.adress
+          },
+        ),
+      );
+
+      if (response.statusCode >= 400) {
+        throw Exception("Failed to add data");
+      }
+
       await loadStudents();
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);

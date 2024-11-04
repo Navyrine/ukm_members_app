@@ -113,6 +113,22 @@ class StudentsNotifier extends StateNotifier<AsyncValue<List<Student>>> {
       state = AsyncValue.error(e, StackTrace.current);
     }
   }
+
+  Future<void> deleteData(Student student) async
+  {
+    final url = Uri.parse(
+        "https://ukm-members-default-rtdb.firebaseio.com/students.json");
+    try {
+      final response = await http.delete(url);
+
+      if (response.statusCode >= 400) {
+        throw Exception("Failed to remove data");
+      }
+      await loadStudents();
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
 }
 
 final studentProvider =

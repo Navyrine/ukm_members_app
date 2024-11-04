@@ -18,8 +18,14 @@ class StudentsList extends ConsumerWidget {
         return ListView.builder(
           itemCount: students.length,
           shrinkWrap: true,
-          itemBuilder: (ctx, index) => StudentItem(
-            studentData: students[index],
+          itemBuilder: (ctx, index) => Dismissible(
+            key: ValueKey(students[index].id),
+            child: StudentItem(
+              studentData: students[index],
+            ),
+            onDismissed: (direction) {
+              ref.read(studentProvider.notifier).deleteData(students[index]);
+            },
           ),
         );
       },

@@ -1,26 +1,24 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ukm_members_app/models/student.dart';
-import 'package:http/http.dart' as http;
+import 'package:ukm_members_app/provider/students_provider.dart';
 
-class AddStudentScreen extends StatefulWidget {
+class AddStudentScreen extends ConsumerStatefulWidget {
   const AddStudentScreen({super.key});
 
   @override
-  State<AddStudentScreen> createState() {
+  ConsumerState<AddStudentScreen> createState() {
     return _AddStudentScreenState();
   }
 }
 
-class _AddStudentScreenState extends State<AddStudentScreen> {
+class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
   final _formKey = GlobalKey<FormState>();
   var _enteredNim = "";
   var _enteredName = "";
   DateTime? _selectedBirth;
   final _birthController = TextEditingController();
   var _enteredAddress = "";
-  var _isSending = false;
 
   void _datePicker() async {
     final now = DateTime.now();
@@ -41,44 +39,38 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      setState(() {
-        _isSending = true;
-      });
 
-      final url = Uri.parse(
-          "https://ukm-members-default-rtdb.firebaseio.com/students.json");
-      final response = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(
-          {
-            "nim": _enteredNim,
-            "name": _enteredName,
-            "birth": _selectedBirth!.toIso8601String(),
-            "address": _enteredAddress
-          },
-        ),
+      final newStudent = Student(
+        id: "",
+        nim: _enteredNim,
+        name: _enteredName,
+        brith: _selectedBirth!,
+        adress: _enteredAddress,
       );
 
-      final Map<String, dynamic> resData = json.decode(response.body);
+      await ref.read(studentProvider.notifier).addStudent(newStudent);
+      final addStudentState = ref.read(studentProvider);
 
-      if (!context.mounted) {
-        return;
-      }
-      Navigator.of(context).pop(
-        Student(
-          id: resData["name"],
-          nim: _enteredNim,
-          name: _enteredName,
-          brith: _selectedBirth!,
-          adress: _enteredAddress,
-        ),
+      addStudentState.when(
+        data: (_) {
+          Navigator.of(context).pop(newStudent);
+        },
+        error: (error, stack) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Failed to save data: $error"),
+            ),
+          );
+        },
+        loading: () {},
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isSending = ref.watch(studentProvider).isLoading;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Add Student"),
@@ -164,8 +156,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
               ),
               const SizedBox(height: 15),
               ElevatedButton(
-                  onPressed: _isSending ? null : _saveForm,
-                  child: _isSending
+                  onPressed: isSending ? null : _saveForm,
+                  child: isSending
                       ? const SizedBox(
                           height: 16,
                           width: 16,

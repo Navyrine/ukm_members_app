@@ -40,6 +40,7 @@ dependencies:
   http: ^1.2.2
   riverpod: ^2.6.1
   flutter_riverpod: ^2.6.1
+  drop_shadow: ^0.1.0
 
 dev_dependencies:
   flutter_test:

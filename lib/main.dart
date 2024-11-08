@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ukm_members_app/screens/home_screen.dart';
+import 'package:ukm_members_app/screens/tabs_screen.dart';
 
 final theme = ThemeData().copyWith(
   textTheme: GoogleFonts.robotoTextTheme().copyWith(
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'UKM MEMBERS',
       theme: theme,
-      home: const HomeScreen(),
+      home: const TabsScreen(),
     );
   }
 }

@@ -18,16 +18,19 @@ class UpdateStudentScreen extends ConsumerStatefulWidget {
 
 class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
   final _formKey = GlobalKey<FormState>();
-  var _enteredNim = "";
-  var _enteredName = "";
+  final _enteredNim = TextEditingController();
+  final _enteredName = TextEditingController();
   DateTime? _selectedBirth;
   final _birthController = TextEditingController();
-  var _enteredAddress = "";
+  final _enteredAddress = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _enteredNim.text = widget.studentUpdate.nim;
+    _enteredName.text = widget.studentUpdate.name;
     _birthController.text = widget.studentUpdate.formattedDate;
+    _enteredAddress.text = widget.studentUpdate.adress;
   }
 
   void _datePicker() async {
@@ -52,10 +55,10 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
 
       final updateStudent = Student(
         id: widget.studentUpdate.id,
-        nim: _enteredNim,
-        name: _enteredName,
-        brith: _selectedBirth!,
-        adress: _enteredAddress,
+        nim: _enteredNim.text,
+        name: _enteredName.text,
+        brith: _selectedBirth ?? widget.studentUpdate.brith,
+        adress: _enteredAddress.text,
       );
 
       try {
@@ -106,7 +109,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredNim = value!;
+                  _enteredNim.text= value!;
                 },
               ),
               const SizedBox(height: 17),
@@ -123,7 +126,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredName = value!;
+                  _enteredName.text = value!;
                 },
               ),
               const SizedBox(height: 20),
@@ -159,7 +162,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredAddress = value!;
+                  _enteredAddress.text = value!;
                 },
               ),
               const SizedBox(height: 15),

@@ -23,8 +23,8 @@ class StudentsList extends ConsumerWidget {
             child: StudentItem(
               studentData: students[index],
             ),
-            onDismissed: (direction) {
-              ref.read(studentProvider.notifier).deleteData(students[index]);
+            onDismissed: (direction) async {
+              await ref.read(studentProvider.notifier).deleteData(students[index]);
             },
           ),
         );

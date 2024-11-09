@@ -107,7 +107,7 @@ class StudentsNotifier extends StateNotifier<AsyncValue<List<Student>>> {
       if (response.statusCode >= 400) {
         throw Exception("Failed to add data");
       }
-
+    
       await loadStudents();
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
@@ -116,15 +116,20 @@ class StudentsNotifier extends StateNotifier<AsyncValue<List<Student>>> {
 
   Future<void> deleteData(Student student) async
   {
+    final currentStudents = state.value ?? [];
+    final removeStudentLocally = currentStudents.where((s) => s.id != student.id).toList();
+
+    state = AsyncValue.data(removeStudentLocally);
+
     final url = Uri.parse(
-        "https://ukm-members-default-rtdb.firebaseio.com/students.json");
+        "https://ukm-members-default-rtdb.firebaseio.com/students/${student.id}.json");
     try {
       final response = await http.delete(url);
 
       if (response.statusCode >= 400) {
         throw Exception("Failed to remove data");
       }
-      await loadStudents();
+      
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }

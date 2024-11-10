@@ -12,9 +12,7 @@ class StudentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: InkWell(
+    return InkWell(
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => UpdateStudentScreen(studentUpdate: studentData))
@@ -22,6 +20,7 @@ class StudentItem extends StatelessWidget {
         },
         child: Container(
           height: 107,
+          margin: const EdgeInsets.all(10),
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 73, 94, 202),
@@ -60,10 +59,9 @@ class StudentItem extends StatelessWidget {
               Positioned(
                 top: 0,
                 bottom: 0,
-                left: 0,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                  child: Column(
+                left: 10,
+                right: 10,
+                child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -87,30 +85,28 @@ class StudentItem extends StatelessWidget {
                       ),
                       Text(
                         studentData.formattedDate,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
                             .copyWith(color: Colors.white),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                       Text(
                         studentData.adress,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
                             .copyWith(color: Colors.white),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
-              ),
             ],
           ),
         ),
-      ),
     );
   }
 }

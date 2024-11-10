@@ -33,6 +33,16 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
     _enteredAddress.text = widget.studentUpdate.adress;
   }
 
+  @override
+  void dispose()
+  {
+    _enteredNim.dispose();
+    _enteredName.dispose();
+    _birthController.dispose();
+    _enteredAddress.dispose();
+    super.dispose();
+  }
+
   void _datePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 100, now.month, now.day);

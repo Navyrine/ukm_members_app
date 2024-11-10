@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ukm_members_app/models/student.dart';
-import 'package:ukm_members_app/screens/update_student_screen.dart';
+import 'package:ukm_members_app/screens/students/update_student_screen.dart';
 
 class StudentItem extends StatelessWidget {
   const StudentItem({

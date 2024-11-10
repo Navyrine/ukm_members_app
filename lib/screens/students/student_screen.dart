@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ukm_members_app/screens/add_student_screen.dart';
+import 'package:ukm_members_app/screens/students/add_student_screen.dart';
 import 'package:ukm_members_app/widgets/students/students_list.dart';
 
 class StudentScreen extends StatelessWidget {

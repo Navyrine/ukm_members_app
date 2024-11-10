@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ukm_members_app/screens/home_screen.dart';
-import 'package:ukm_members_app/screens/student_screen.dart';
-import 'package:ukm_members_app/screens/ukm_screen.dart';
+import 'package:ukm_members_app/screens/students/student_screen.dart';
+import 'package:ukm_members_app/screens/ukm/ukm_screen.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});

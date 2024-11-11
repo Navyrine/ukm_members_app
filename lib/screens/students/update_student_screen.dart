@@ -18,28 +18,28 @@ class UpdateStudentScreen extends ConsumerStatefulWidget {
 
 class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _enteredNim = TextEditingController();
-  final _enteredName = TextEditingController();
+  final _nimController = TextEditingController();
+  final _nameController = TextEditingController();
   DateTime? _selectedBirth;
   final _birthController = TextEditingController();
-  final _enteredAddress = TextEditingController();
+  final _addressController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _enteredNim.text = widget.studentUpdate.nim;
-    _enteredName.text = widget.studentUpdate.name;
+    _nimController.text = widget.studentUpdate.nim;
+    _nameController.text = widget.studentUpdate.name;
     _birthController.text = widget.studentUpdate.formattedDate;
-    _enteredAddress.text = widget.studentUpdate.adress;
+    _addressController.text = widget.studentUpdate.adress;
   }
 
   @override
   void dispose()
   {
-    _enteredNim.dispose();
-    _enteredName.dispose();
+    _nimController.dispose();
+    _nameController.dispose();
     _birthController.dispose();
-    _enteredAddress.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 
@@ -65,10 +65,10 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
 
       final updateStudent = Student(
         id: widget.studentUpdate.id,
-        nim: _enteredNim.text,
-        name: _enteredName.text,
+        nim: _nimController.text,
+        name: _nameController.text,
         brith: _selectedBirth ?? widget.studentUpdate.brith,
-        adress: _enteredAddress.text,
+        adress: _addressController.text,
       );
 
       try {
@@ -102,7 +102,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
-                controller: _enteredNim,
+                controller: _nimController,
                 maxLength: 10,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
@@ -119,12 +119,12 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredNim.text= value!;
+                  _nimController.text= value!;
                 },
               ),
               const SizedBox(height: 17),
               TextFormField(
-                controller: _enteredName,
+                controller: _nameController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Name"),
@@ -136,7 +136,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredName.text = value!;
+                  _nameController.text = value!;
                 },
               ),
               const SizedBox(height: 20),
@@ -160,7 +160,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                controller: _enteredAddress,
+                controller: _addressController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Address"),
@@ -172,7 +172,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredAddress.text = value!;
+                  _addressController.text = value!;
                 },
               ),
               const SizedBox(height: 15),

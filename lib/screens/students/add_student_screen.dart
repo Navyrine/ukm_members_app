@@ -14,11 +14,11 @@ class AddStudentScreen extends ConsumerStatefulWidget {
 
 class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
   final _formKey = GlobalKey<FormState>();
-  var _enteredNim = "";
-  var _enteredName = "";
+  final _nimController = TextEditingController();
+  final _nameController = TextEditingController();
   DateTime? _selectedBirth;
   final _birthController = TextEditingController();
-  var _enteredAddress = "";
+  final _addressController = TextEditingController();
 
   void _datePicker() async {
     final now = DateTime.now();
@@ -42,10 +42,10 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
 
       final newStudent = Student(
         id: "",
-        nim: _enteredNim,
-        name: _enteredName,
+        nim: _nimController.text,
+        name: _nameController.text,
         brith: _selectedBirth!,
-        adress: _enteredAddress,
+        adress: _addressController.text,
       );
 
       try {
@@ -79,6 +79,7 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
+                controller: _nimController,
                 maxLength: 10,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
@@ -95,11 +96,12 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredNim = value!;
+                  _nimController.text = value!;
                 },
               ),
               const SizedBox(height: 17),
               TextFormField(
+                controller: _nameController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Name"),
@@ -111,7 +113,7 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredName = value!;
+                  _nameController.text = value!;
                 },
               ),
               const SizedBox(height: 20),
@@ -135,6 +137,7 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
               ),
               const SizedBox(height: 20),
               TextFormField(
+                controller: _addressController,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Address"),
@@ -146,7 +149,7 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
                   return null;
                 },
                 onSaved: (value) {
-                  _enteredAddress = value!;
+                  _addressController.text = value!;
                 },
               ),
               const SizedBox(height: 15),

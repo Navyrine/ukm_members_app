@@ -20,6 +20,15 @@ class _AddStudentScreenState extends ConsumerState<AddStudentScreen> {
   final _birthController = TextEditingController();
   final _addressController = TextEditingController();
 
+  @override
+  void dispose() {
+    _nimController.dispose();
+    _nameController.dispose();
+    _birthController.dispose();
+    _addressController.dispose();
+    super.dispose();
+  }
+
   void _datePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 100, now.month, now.day);

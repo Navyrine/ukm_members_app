@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ukm_members_app/screens/ukm/add_ukm_screen.dart';
+import 'package:ukm_members_app/screens/ukm/ukm_members_screen.dart';
 import 'package:ukm_members_app/widgets/ukm/ukm_list.dart';
 
 class UkmScreen extends StatelessWidget {
@@ -17,6 +18,16 @@ class UkmScreen extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (ctx) => const AddUkmScreen(),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.list_alt),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => const UkmMembersScreen(),
                 ),
               );
             },

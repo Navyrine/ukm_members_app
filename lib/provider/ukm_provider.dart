@@ -5,7 +5,7 @@ import 'package:ukm_members_app/models/ukm.dart';
 import 'package:http/http.dart' as http;
 
 class UkmNotifier extends StateNotifier<AsyncValue<List<Ukm>>> {
-  UkmNotifier() : super(const AsyncValue.loading()){
+  UkmNotifier() : super(const AsyncValue.loading()) {
     loaddedUkms();
   }
 
@@ -79,27 +79,37 @@ class UkmNotifier extends StateNotifier<AsyncValue<List<Ukm>>> {
     }
   }
 
-  Future<void> updateUkm(Ukm ukm) async
-  {
-     final url =
-        Uri.parse("https://ukm-members-default-rtdb.firebaseio.com/ukm/${ukm.id}.json");
-    
+  Future<void> updateUkm(Ukm ukm) async {
+    final url = Uri.parse(
+        "https://ukm-members-default-rtdb.firebaseio.com/ukm/${ukm.id}.json");
+
     try {
       state = const AsyncValue.loading();
 
       final response = await http.patch(url,
-      headers: {"Content-Type": "application/json"},
-      body: json.encode({
-        "name": ukm.name,
-        "description": ukm.description
-      })
-      );
+          headers: {"Content-Type": "application/json"},
+          body:
+              json.encode({"name": ukm.name, "description": ukm.description}));
 
       if (response.statusCode >= 400) {
         throw Exception("Failed to update data");
       }
 
       await loaddedUkms();
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
+
+  Future<void> deleteUkm(Ukm ukm) async {
+    final url = Uri.parse(
+        "https://ukm-members-default-rtdb.firebaseio.com/ukm/${ukm.id}.json");
+    try {
+      final response = await http.delete(url);
+
+      if (response.statusCode >= 400) {
+        throw Exception("Failed to remove data");
+      }
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     }

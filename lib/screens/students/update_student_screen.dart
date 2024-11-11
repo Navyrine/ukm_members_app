@@ -102,7 +102,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               TextFormField(
-                initialValue: widget.studentUpdate.nim,
+                controller: _enteredNim,
                 maxLength: 10,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
@@ -124,7 +124,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
               ),
               const SizedBox(height: 17),
               TextFormField(
-                initialValue: widget.studentUpdate.name,
+                controller: _enteredName,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Name"),
@@ -160,7 +160,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
               ),
               const SizedBox(height: 20),
               TextFormField(
-                initialValue: widget.studentUpdate.adress,
+                controller: _enteredAddress,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Address"),

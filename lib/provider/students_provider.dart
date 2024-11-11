@@ -105,7 +105,7 @@ class StudentsNotifier extends StateNotifier<AsyncValue<List<Student>>> {
       );
 
       if (response.statusCode >= 400) {
-        throw Exception("Failed to add data");
+        throw Exception("Failed to update data");
       }
     
       await loadStudents();

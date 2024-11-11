@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ukm_members_app/models/ukm.dart';
+import 'package:ukm_members_app/screens/ukm/update_ukm_screen.dart';
 
 class UkmItem extends StatelessWidget {
   const UkmItem({
@@ -11,7 +12,15 @@ class UkmItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => UpdateUkmScreen(ukmpdate: ukm),
+          ),
+        );
+      },
+      child: Container(
         height: 100,
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
@@ -50,6 +59,7 @@ class UkmItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
     );
   }
 }

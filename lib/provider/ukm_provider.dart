@@ -78,6 +78,32 @@ class UkmNotifier extends StateNotifier<AsyncValue<List<Ukm>>> {
       state = AsyncValue.error("Something went wrong: $e", StackTrace.current);
     }
   }
+
+  Future<void> updateUkm(Ukm ukm) async
+  {
+     final url =
+        Uri.parse("https://ukm-members-default-rtdb.firebaseio.com/ukm/${ukm.id}.json");
+    
+    try {
+      state = const AsyncValue.loading();
+
+      final response = await http.patch(url,
+      headers: {"Content-Type": "application/json"},
+      body: json.encode({
+        "name": ukm.name,
+        "description": ukm.description
+      })
+      );
+
+      if (response.statusCode >= 400) {
+        throw Exception("Failed to update data");
+      }
+
+      await loaddedUkms();
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
 }
 
 final ukmProvider = StateNotifierProvider<UkmNotifier, AsyncValue<List<Ukm>>>(

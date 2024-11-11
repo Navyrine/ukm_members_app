@@ -25,6 +25,7 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: screens[_selectedScreenIndex],
+        extendBody: true,
         bottomNavigationBar: Container(
           height: 80,
           margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20),

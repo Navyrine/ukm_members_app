@@ -102,6 +102,11 @@ class UkmNotifier extends StateNotifier<AsyncValue<List<Ukm>>> {
   }
 
   Future<void> deleteUkm(Ukm ukm) async {
+    final currentUkms = state.value ?? [];
+    final removeUkmLocally = currentUkms.where((u) => u.id != ukm.id).toList();
+
+    state = AsyncValue.data(removeUkmLocally);
+    
     final url = Uri.parse(
         "https://ukm-members-default-rtdb.firebaseio.com/ukm/${ukm.id}.json");
     try {

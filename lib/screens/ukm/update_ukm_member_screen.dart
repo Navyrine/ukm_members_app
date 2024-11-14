@@ -5,26 +5,39 @@ import 'package:ukm_members_app/provider/students_provider.dart';
 import 'package:ukm_members_app/provider/ukm_members_provider.dart';
 import 'package:ukm_members_app/provider/ukm_provider.dart';
 
-class AddUkmMemberScreen extends ConsumerStatefulWidget {
-  const AddUkmMemberScreen({super.key});
+class UpdateUkmMemberScreen extends ConsumerStatefulWidget {
+  const UpdateUkmMemberScreen({
+    super.key,
+    required this.member,
+  });
+
+  final UkmMember member;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
-    return _AddUkmMemberScreenState();
+    return _UpdateUkmMemberScreenState();
   }
 }
 
-class _AddUkmMemberScreenState extends ConsumerState<AddUkmMemberScreen> {
+class _UpdateUkmMemberScreenState extends ConsumerState<UpdateUkmMemberScreen> {
   String? _selectedStudentName;
   String? _selectedUkmName;
   bool isRegistered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedStudentName = widget.member.studentName;
+    _selectedUkmName = widget.member.ukmName;
+  }
 
   void _saveForm() async {
     final studentValueRegistered = ref.watch(ukmMemberProvider);
     final registeredStatus = studentValueRegistered.maybeWhen(
       data: (status) {
         return status.any((registeredStatus) =>
-            registeredStatus.isRegistered == true && registeredStatus.studentName == _selectedStudentName);
+            registeredStatus.isRegistered == true &&
+            registeredStatus.studentName == _selectedStudentName);
       },
       orElse: () => false,
     );
@@ -46,20 +59,20 @@ class _AddUkmMemberScreenState extends ConsumerState<AddUkmMemberScreen> {
         ),
       );
     } else {
-      final saveMember = UkmMember(
-        id: "",
+      final updateMember = UkmMember(
+        id: widget.member.id,
         studentName: _selectedStudentName!,
         ukmName: _selectedUkmName!,
         isRegistered: isRegistered = true,
       );
 
       try {
-        await ref.read(ukmMemberProvider.notifier).addUkmMember(saveMember);
-        Navigator.of(context).pop(saveMember);
+        await ref.read(ukmMemberProvider.notifier).updateUkmMember(updateMember);
+        Navigator.of(context).pop(updateMember);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Failed to save data: $e"),
+            content: Text("Failed to update data: $e"),
           ),
         );
       }
@@ -184,7 +197,7 @@ class _AddUkmMemberScreenState extends ConsumerState<AddUkmMemberScreen> {
                         width: 16,
                         child: CircularProgressIndicator(),
                       )
-                    : const Text("Save"),
+                    : const Text("Update"),
               ),
             ],
           ),

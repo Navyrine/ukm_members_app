@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ukm_members_app/models/ukm_member.dart';
+import 'package:ukm_members_app/screens/ukm/update_ukm_member_screen.dart';
 
 class UkmMemberItem extends StatelessWidget {
   const UkmMemberItem({
@@ -12,7 +13,13 @@ class UkmMemberItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => UpdateUkmMemberScreen(member: member),
+          ),
+        );
+      },
       child: Container(
         height: 100,
         margin: const EdgeInsets.all(10),

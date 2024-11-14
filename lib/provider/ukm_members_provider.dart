@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:ukm_members_app/models/ukm_member.dart';
 
 class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
-  UkmMembersNotifier() : super(const AsyncValue.loading()){
+  UkmMembersNotifier() : super(const AsyncValue.loading()) {
     loaddedUkmMember();
   }
 
@@ -20,7 +20,11 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
         url,
         headers: {"Content-Type": "application/json"},
         body: json.encode(
-          {"studentName": member.studentName, "ukmName": member.ukmName, "isRegistered": member.isRegistered,},
+          {
+            "studentName": member.studentName,
+            "ukmName": member.ukmName,
+            "isRegistered": member.isRegistered,
+          },
         ),
       );
 
@@ -64,11 +68,11 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
       final Map<String, dynamic> listData = json.decode(response.body);
       final List<UkmMember> loaddedMember = listData.entries.map((member) {
         return UkmMember(
-            id: member.key,
-            studentName: member.value["studentName"],
-            ukmName: member.value["ukmName"],
-            isRegistered: member.value["isRegistered"],
-            );
+          id: member.key,
+          studentName: member.value["studentName"],
+          ukmName: member.value["ukmName"],
+          isRegistered: member.value["isRegistered"],
+        );
       }).toList();
 
       state = AsyncValue.data(loaddedMember);
@@ -77,10 +81,10 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
     }
   }
 
-  Future<void> deleteUkmMember(UkmMember member) async
-  {
+  Future<void> deleteUkmMember(UkmMember member) async {
     final currentItem = state.value ?? [];
-    final removeUkmLocally = currentItem.where((m) => m.id != member.id).toList();
+    final removeUkmLocally =
+        currentItem.where((m) => m.id != member.id).toList();
 
     state = AsyncValue.data(removeUkmLocally);
 
@@ -95,6 +99,30 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
       }
     } catch (e) {
       state = AsyncValue.error("Failed to remove data: $e", StackTrace.current);
+    }
+  }
+
+  Future<void> updateUkmMember(UkmMember member) async {
+    final url = Uri.parse(
+        "https://ukm-members-default-rtdb.firebaseio.com/ukm_member/${member.id}.json");
+
+    try {
+      final response = await http.patch(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "studentName": member.studentName,
+          "ukmName": member.ukmName,
+          "isRegistered": member.isRegistered
+        }),
+      );
+
+      if (response.statusCode >= 400) {
+        throw Exception("Failed to update data");
+      }
+      await loaddedUkmMember();
+    } catch (e) {
+      state = AsyncValue.error(e, StackTrace.current);
     }
   }
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:ukm_members_app/models/ukm_member.dart';
 
 class UkmMemberItem extends StatelessWidget {
   const UkmMemberItem({
     super.key,
+    required this.member,
   });
+
+  final UkmMember member;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class UkmMemberItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                "Student Name",
+                member.studentName,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -37,7 +41,7 @@ class UkmMemberItem extends StatelessWidget {
                     ),
               ),
               Text(
-                "Student UKM",
+                member.ukmName,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context)

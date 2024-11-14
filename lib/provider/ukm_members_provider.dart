@@ -5,7 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:ukm_members_app/models/ukm_member.dart';
 
 class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
-  UkmMembersNotifier() : super(const AsyncData([]));
+  UkmMembersNotifier() : super(const AsyncValue.loading()){
+    loaddedUkmMember();
+  }
 
   Future<void> addUkmMember(UkmMember member) async {
     final url = Uri.parse(
@@ -34,8 +36,41 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
         ukmName: member.ukmName,
       );
       state = AsyncValue.data([...state.value ?? [], member]);
+      await loaddedUkmMember();
     } catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
+    }
+  }
+
+  Future<void> loaddedUkmMember() async {
+    final url = Uri.parse(
+        "https://ukm-members-default-rtdb.firebaseio.com/ukm_member.json");
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode >= 400) {
+        state = AsyncValue.error(
+            "Failed to load data, try again later", StackTrace.current);
+        return;
+      }
+
+      if (response.body == "null") {
+        state = const AsyncValue.data([]);
+        return;
+      }
+
+      final Map<String, dynamic> listData = json.decode(response.body);
+      final List<UkmMember> loaddedMember = listData.entries.map((member) {
+        return UkmMember(
+            id: member.key,
+            studentName: member.value["studentName"],
+            ukmName: member.value["ukmName"]);
+      }).toList();
+
+      state = AsyncValue.data(loaddedMember);
+    } catch (e) {
+      state = AsyncValue.error("Something went wrong: $e", StackTrace.current);
     }
   }
 }

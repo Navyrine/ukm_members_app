@@ -17,8 +17,28 @@ class AddUkmMemberScreen extends ConsumerStatefulWidget {
 class _AddUkmMemberScreenState extends ConsumerState<AddUkmMemberScreen> {
   String? _selectedStudentName;
   String? _selectedUkmName;
+  bool isRegistered = false;
 
   void _saveForm() async {
+    final studentValueRegistered = ref.watch(ukmMemberProvider);
+    final registeredStatus = studentValueRegistered.maybeWhen(
+      data: (status) {
+        return status.any((registeredStatus) =>
+            registeredStatus.isRegistered == true && registeredStatus.studentName == _selectedStudentName);
+      },
+      orElse: () => false,
+    );
+
+    if (registeredStatus) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+              "The student's name cannot be registered because it has already been registered"),
+        ),
+      );
+      return;
+    }
+
     if (_selectedStudentName == null || _selectedUkmName == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -30,6 +50,7 @@ class _AddUkmMemberScreenState extends ConsumerState<AddUkmMemberScreen> {
         id: "",
         studentName: _selectedStudentName!,
         ukmName: _selectedUkmName!,
+        isRegistered: isRegistered = true,
       );
 
       try {

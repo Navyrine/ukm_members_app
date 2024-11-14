@@ -20,7 +20,7 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
         url,
         headers: {"Content-Type": "application/json"},
         body: json.encode(
-          {"studentName": member.studentName, "ukmName": member.ukmName},
+          {"studentName": member.studentName, "ukmName": member.ukmName, "isRegistered": member.isRegistered,},
         ),
       );
 
@@ -34,6 +34,7 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
         id: resData["name"],
         studentName: member.studentName,
         ukmName: member.ukmName,
+        isRegistered: member.isRegistered,
       );
       state = AsyncValue.data([...state.value ?? [], member]);
       await loaddedUkmMember();
@@ -65,7 +66,9 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
         return UkmMember(
             id: member.key,
             studentName: member.value["studentName"],
-            ukmName: member.value["ukmName"]);
+            ukmName: member.value["ukmName"],
+            isRegistered: member.value["isRegistered"],
+            );
       }).toList();
 
       state = AsyncValue.data(loaddedMember);

@@ -76,6 +76,27 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
       state = AsyncValue.error("Something went wrong: $e", StackTrace.current);
     }
   }
+
+  Future<void> deleteUkmMember(UkmMember member) async
+  {
+    final currentItem = state.value ?? [];
+    final removeUkmLocally = currentItem.where((m) => m.id != member.id).toList();
+
+    state = AsyncValue.data(removeUkmLocally);
+
+    final url = Uri.parse(
+        "https://ukm-members-default-rtdb.firebaseio.com/ukm_member/${member.id}.json");
+
+    try {
+      final response = await http.delete(url);
+
+      if (response.statusCode >= 400) {
+        throw Exception("Failed to remove data");
+      }
+    } catch (e) {
+      state = AsyncValue.error("Failed to remove data: $e", StackTrace.current);
+    }
+  }
 }
 
 final ukmMemberProvider =

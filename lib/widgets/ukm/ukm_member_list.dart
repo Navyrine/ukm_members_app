@@ -21,7 +21,17 @@ class UkmMemberList extends ConsumerWidget {
         return ListView.builder(
           itemCount: memberData.length,
           shrinkWrap: true,
-          itemBuilder: (ctx, index) => UkmMemberItem(member: memberData[index]),
+          itemBuilder: (ctx, index) => Dismissible(
+            key: ValueKey(memberData[index].id),
+            child: UkmMemberItem(
+              member: memberData[index],
+            ),
+            onDismissed: (direction) async {
+              ref.read(ukmMemberProvider.notifier).deleteUkmMember(
+                    memberData[index],
+                  );
+            },
+          ),
         );
       },
       error: (error, stack) => Center(

@@ -18,19 +18,21 @@ class UkmMemberList extends ConsumerWidget {
           );
         }
 
-        return ListView.builder(
-          itemCount: memberData.length,
-          shrinkWrap: true,
-          itemBuilder: (ctx, index) => Dismissible(
-            key: ValueKey(memberData[index].id),
-            child: UkmMemberItem(
-              member: memberData[index],
+        return Expanded(
+          child: ListView.builder(
+            itemCount: memberData.length,
+            shrinkWrap: true,
+            itemBuilder: (ctx, index) => Dismissible(
+              key: ValueKey(memberData[index].id),
+              child: UkmMemberItem(
+                member: memberData[index],
+              ),
+              onDismissed: (direction) async {
+                ref.read(ukmMemberProvider.notifier).deleteUkmMember(
+                      memberData[index],
+                    );
+              },
             ),
-            onDismissed: (direction) async {
-              ref.read(ukmMemberProvider.notifier).deleteUkmMember(
-                    memberData[index],
-                  );
-            },
           ),
         );
       },

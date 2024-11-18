@@ -24,35 +24,8 @@ class _UpdateUkmMemberScreenState extends ConsumerState<UpdateUkmMemberScreen> {
   String? _selectedUkmName;
   bool isRegistered = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _selectedStudentName = widget.member.studentName;
-    _selectedUkmName = widget.member.ukmName;
-  }
-
   void _saveForm() async {
-    final studentValueRegistered = ref.watch(ukmMemberProvider);
-    final registeredStatus = studentValueRegistered.maybeWhen(
-      data: (status) {
-        return status.any((registeredStatus) =>
-            registeredStatus.isRegistered == true &&
-            registeredStatus.studentName == _selectedStudentName);
-      },
-      orElse: () => false,
-    );
-
-    if (registeredStatus) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-              "The student's name cannot be registered because it has already been registered"),
-        ),
-      );
-      return;
-    }
-
-    if (_selectedStudentName == null || _selectedUkmName == null) {
+     if (_selectedStudentName == null || _selectedUkmName == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Student name dan activity name must be filled"),
@@ -81,9 +54,9 @@ class _UpdateUkmMemberScreenState extends ConsumerState<UpdateUkmMemberScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isLoading = ref.watch(ukmMemberProvider).isLoading;
     final studentValueName = ref.watch(studentProvider);
     final ukmValueName = ref.watch(ukmProvider);
-    final isLoading = ref.watch(ukmMemberProvider).isLoading;
 
     studentValueName.whenData((student) {
       if (_selectedStudentName == null && student.isNotEmpty) {
@@ -100,6 +73,7 @@ class _UpdateUkmMemberScreenState extends ConsumerState<UpdateUkmMemberScreen> {
         });
       }
     });
+
 
     return Scaffold(
       appBar: AppBar(

@@ -9,16 +9,16 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
     loaddedUkmMember();
   }
 
-  List<UkmMember> _allMembers = [];
-
   void setSearchQuery(String query) {
 
+    final currentItem = state.value ?? [];
+
     if (query.isEmpty) {
-      state = AsyncValue.data(_allMembers);
+      loaddedUkmMember();
       return;
     }
 
-    final filteredMembers = _allMembers
+    final filteredMembers = currentItem
         .where(
           (member) =>
               member.studentName
@@ -86,7 +86,6 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
 
       if (response.body == "null") {
         state = const AsyncValue.data([]);
-        _allMembers = [];
         return;
       }
 
@@ -100,7 +99,6 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
         );
       }).toList();
 
-      _allMembers = loaddedMember;
       state = AsyncValue.data(loaddedMember);
     } catch (e) {
       state = AsyncValue.error("Something went wrong: $e", StackTrace.current);
@@ -133,6 +131,8 @@ class UkmMembersNotifier extends StateNotifier<AsyncValue<List<UkmMember>>> {
         "https://ukm-members-default-rtdb.firebaseio.com/ukm_member/${member.id}.json");
 
     try {
+      state = const AsyncValue.loading();
+      
       final response = await http.patch(
         url,
         headers: {"Content-Type": "application/json"},

@@ -91,6 +91,7 @@ class _UpdateUkmScreenState extends ConsumerState<UpdateUkmScreen>
               const SizedBox(height: 20),
               TextFormField(
                 controller: _descriptionUpdateController,
+                maxLines: 4,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(label: Text("Description")),
                 validator: (value) {

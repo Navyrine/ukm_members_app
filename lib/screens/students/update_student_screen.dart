@@ -161,6 +161,7 @@ class _UpdateStudentScreenState extends ConsumerState<UpdateStudentScreen> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _addressController,
+                maxLines: 4,
                 autovalidateMode: AutovalidateMode.onUserInteraction,
                 decoration: const InputDecoration(
                   label: Text("Address"),

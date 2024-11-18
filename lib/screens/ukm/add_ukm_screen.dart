@@ -79,6 +79,7 @@ class _AddUkmScreenState extends ConsumerState<AddUkmScreen> {
               const SizedBox(height: 20),
               TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                maxLines: 4,
                 decoration: const InputDecoration(label: Text("Description")),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
